@@ -1,0 +1,20 @@
+{
+  "name": "facility-booking-ui",
+  "version": "1.0.0",
+  "description": "UI + API for FacilityBookingDB",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.19.0",
+    "mssql": "^11.0.1",
+    "multer": "^2.2.0",
+    "oracledb": "^7.0.1"
+  }
+}

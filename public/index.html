@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Facility Booking</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<section id="login-screen" class="uv-login">
+    <div class="uv-login__photo"></div>
+    <div class="uv-login__overlay"></div>
+
+    <div class="uv-login__left">
+    <div class="uv-login__brand uv-login__brand--top">
+        <span class="uv-login__logomark">🏫</span>
+        <span class="uv-login__logotext">Facility Booking</span>
+    </div>
+
+    <div class="uv-login__spacer"></div>
+
+    <p class="uv-login__tagline">Reserve labs, courts, and halls<br>across campus in seconds</p>
+</div>
+
+    <div class="uv-login__right">
+        <h2 class="uv-login__title">Sign in</h2>
+        <p class="uv-login__subtitle">Access your campus booking account</p>
+
+        <label class="uv-field">
+            <span>Username</span>
+            <input type="text" id="login-username" autocomplete="username" placeholder="Student ID or admin username">
+        </label>
+
+        <label class="uv-field">
+    <span>Password</span>
+    <input type="password" id="login-password" autocomplete="current-password" placeholder="Enter your password">
+</label>
+
+<div class="uv-login__forgot">
+    <a href="#" id="forgot-password-link">Forgot password?</a>
+</div>
+
+        <button id="login-btn" class="uv-login__submit">Login</button>
+
+        <div id="login-status" class="uv-login__status"></div>
+
+        <p class="uv-login__hint">Students sign in with their Student ID</p>
+    </div>
+    
+</section>
+
+<section id="forgot-password-screen" class="uv-login" style="display:none;">
+    <div class="uv-login__photo"></div>
+    <div class="uv-login__overlay"></div>
+
+    <div class="uv-login__left">
+        <div class="uv-login__brand uv-login__brand--top">
+            <span class="uv-login__logomark">🏫</span>
+            <span class="uv-login__logotext">Facility Booking</span>
+        </div>
+        <div class="uv-login__spacer"></div>
+        <p class="uv-login__tagline">Reserve labs, courts, and halls<br>across campus in seconds</p>
+    </div>
+
+    <div class="uv-login__right">
+        <h2 class="uv-login__title">Reset password</h2>
+        <p class="uv-login__subtitle">Enter your Student ID and choose a new password</p>
+
+        <label class="uv-field">
+            <span>Student ID</span>
+            <input type="number" id="reset-studentId" placeholder="Your Student ID">
+        </label>
+
+        <label class="uv-field">
+            <span>New password</span>
+            <input type="password" id="reset-newPassword" placeholder="Enter a new password">
+        </label>
+
+        <button id="reset-password-btn" class="uv-login__submit">Reset password</button>
+
+        <div id="reset-status" class="uv-login__status"></div>
+
+        <p class="uv-login__hint"><a href="#" id="back-to-login-link" style="color:#B7BFCC;">Back to sign in</a></p>
+    </div>
+</section>
+
+
+<!-- MAIN APP (hidden until logged in) -->
+<div id="app-shell" class="app" style="display:none;">
+
+    <aside class="app__sidebar">
+        <div class="app__brand">
+            <span class="app__logomark">🏫</span>
+            <span class="app__logotext">Facility Booking</span>
+        </div>
+
+        <nav class="app__nav">
+            <button class="tab-btn" id="browse-tab-btn" data-tab="browse">
+                <span class="app__navicon">📅</span> Book a Facility
+            </button>
+            <button class="tab-btn" id="home-tab-btn" data-tab="home">
+                <span class="app__navicon">📝</span> <span id="home-tab-label">My Bookings</span>
+            </button>
+            <button class="tab-btn" id="admin-tab-btn" data-tab="admin">
+                <span class="app__navicon">📊</span> Reports
+            </button>
+            <button class="tab-btn" id="register-tab-btn" data-tab="register-student" style="display:none;">
+                <span class="app__navicon">🙎🏻‍♂️</span> Register Student
+            </button>
+            <button class="tab-btn" id="profile-tab-btn" data-tab="profile" style="display:none;">
+                <span class="app__navicon">⚙️</span> Profile
+            </button>
+        </nav>
+
+        <div class="app__sidebar-footer"></div>
+
+    </aside>
+
+    <div class="app__main">
+
+    <div class="app__topbar">
+    <div class="user-menu">
+        <button id="user-menu-btn" class="user-menu__trigger">
+            <span id="logged-in-as" class="app__topbar-user"></span>
+            <span class="user-menu__arrow">▾</span>
+        </button>
+        <div id="user-menu-dropdown" class="user-menu__dropdown" style="display:none;">
+            <button id="user-menu-profile" class="user-menu__item">Profile</button>
+            <button id="user-menu-logout" class="user-menu__item user-menu__item--danger">Logout</button>
+        </div>
+    </div>
+    <button id="theme-toggle-btn" class="theme-toggle" title="Toggle light/dark mode">
+        <span class="theme-toggle__icon theme-toggle__icon--sun">☀</span>
+        <span class="theme-toggle__icon theme-toggle__icon--moon">☾</span>
+        <span class="theme-toggle__knob"></span>
+    </button>
+</div>
+    <main>
+
+<!-- HOME -->
+<section id="home" class="tab-panel active">
+    <h2 id="home-heading">Dashboard</h2>
+    <div class="stat-grid" id="stat-grid"></div>
+
+    <h2 id="my-bookings-heading" class="home-bookings-heading">My Bookings</h2>
+    <div class="form-row" id="mybookings-controls">
+        <label>Search by Student ID <input type="number" id="bookings-search-studentId" placeholder="Enter a Student ID"></label>
+    </div>
+    <table id="bookings-table">
+        <thead>
+            <tr><th>Booking ID</th><th>Student ID</th><th>Student Name</th><th>Date</th><th>Facility</th><th>Time</th><th><button id="refresh-bookings-btn" title="Refresh">&#8635;</button></th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+
+<!-- BROWSE FACILITIES -->
+<section id="browse" class="tab-panel">
+    <h2>Facilities</h2>
+
+    <div class="form-row" id="add-facility-form" style="display:none;">
+        <label>Name <input type="text" id="new-facility-name"></label>
+        <label>Building <input type="text" id="new-facility-building"></label>
+        <label>Floor <input type="text" id="new-facility-floor" placeholder="e.g. G, 1, 2"></label>
+        <label>Capacity <input type="number" id="new-facility-capacity"></label>
+        <label>Status
+            <select id="new-facility-status">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+        </label>
+        <label>Photo <input type="file" id="new-facility-photo" accept="image/*"></label>
+        <button id="add-facility-btn">Add Facility</button>
+    </div>
+    <div id="add-facility-status"></div>
+
+    <div id="facility-categories"></div>
+</section>
+
+<!-- SINGLE FACILITY BOOKING -->
+<section id="facility-detail" class="tab-panel">
+    <button id="back-to-browse-btn" class="back-link">← Back to Facilities</button>
+    <h2 id="facility-detail-name"></h2>
+    <p id="facility-detail-meta" class="facility-detail-meta"></p>
+
+    <div class="facility-detail-layout">
+        <div class="facility-detail-calendar">
+            <div class="mini-cal__header">
+                <button id="cal-prev-btn" class="mini-cal__nav">←</button>
+                <span id="cal-month-label"></span>
+                <button id="cal-next-btn" class="mini-cal__nav">→</button>
+            </div>
+            <div class="mini-cal__weekdays">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div id="mini-cal-grid" class="mini-cal__grid"></div>
+        </div>
+
+        <div class="facility-detail-slots">
+            <p id="detail-best-window"></p>
+            <div id="detail-slots-container">
+                <p class="muted-text">Pick a date to see available times.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="detail-booking-status"></div>
+</section>
+
+<!-- REGISTER STUDENT -->
+<section id="register-student" class="tab-panel">
+    <h2>Register New Student</h2>
+
+    <div class="form-row">
+        <label>Name <input type="text" id="reg-name"></label>
+        <label>Email <input type="email" id="reg-email"></label>
+        <label>Password <input type="password" id="reg-password"></label>
+        <button id="register-student-btn">Register</button>
+    </div>
+
+    <div id="register-status"></div>
+
+<h2 class="home-bookings-heading">Students Information</h2>
+<table id="students-table">
+    <thead>
+        <tr><th>Student ID</th><th>Name</th><th>Email</th><th></th></tr>
+    </thead>
+    <tbody></tbody>
+</table>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="tab-panel">
+    <h2>My Profile</h2>
+
+    <div class="profile-header">
+        <div class="profile-avatar" id="profile-avatar"></div>
+        <div class="profile-header__info">
+            <div class="profile-header__name" id="profile-header-name"></div>
+            <div class="profile-header__id" id="profile-header-id"></div>
+        </div>
+    </div>
+
+    <div class="profile-card">
+        <h3 class="profile-card__title">Edit Profile</h3>
+        <div class="form-row">
+            <label>Name <input type="text" id="profile-name"></label>
+            <label>Email <input type="email" id="profile-email"></label>
+            <button id="save-profile-btn">Save Changes</button>
+        </div>
+        <div id="profile-status"></div>
+    </div>
+
+    <div class="profile-card">
+        <h3 class="profile-card__title">Password</h3>
+        <div class="form-row">
+            <label>Current Password <input type="password" id="profile-currentPassword"></label>
+            <label>New Password <input type="password" id="profile-newPassword"></label>
+            <button id="change-password-btn">Change Password</button>
+        </div>
+        <div id="password-status"></div>
+    </div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="tab-panel">
+    <h2>Facility Reports</h2>
+
+    <div id="busy-chart" class="bar-chart"></div>
+
+    <table id="busy-table">
+        <thead>
+            <tr><th>Facility</th><th>Bookings</th><th>Utilization</th><th>Peak Hour</th><th>Status</th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+
+        </main>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

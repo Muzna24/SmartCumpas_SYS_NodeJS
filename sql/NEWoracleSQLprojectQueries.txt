@@ -1,0 +1,596 @@
+-------------------------------------------------------------------------------------------
+-- SECTION 1: TABLES
+-------------------------------------------------------------------------------------------
+
+CREATE TABLE Students (
+    StudentID   NUMBER PRIMARY KEY,
+    Name        VARCHAR2(100) NOT NULL,
+    Email       VARCHAR2(100) NOT NULL UNIQUE,
+    Password    VARCHAR2(255) DEFAULT 'password123'
+);
+/
+
+CREATE TABLE Facilities (
+    FacilityID    NUMBER,
+    FacilityName  VARCHAR2(100) NOT NULL,
+    PhotoPath     VARCHAR2(255),
+    PRIMARY KEY (FacilityID)
+);
+/
+
+CREATE TABLE Locations (
+    LocationID    NUMBER PRIMARY KEY,
+    BuildingName  VARCHAR2(100) NOT NULL,
+    Floor         VARCHAR2(10),
+    Description   VARCHAR2(255)
+);
+/
+
+CREATE TABLE Time_Slot (
+    TimeSlotID  NUMBER PRIMARY KEY,
+    StartTime   DATE NOT NULL,
+    EndTime     DATE NOT NULL
+);
+/
+
+CREATE TABLE Booking (
+    BookingID    NUMBER PRIMARY KEY,
+    BookingDate  DATE NOT NULL,
+    FacilityID   NUMBER,
+    StudentID    NUMBER,
+    TimeSlotID   NUMBER,
+    CONSTRAINT FK_Booking_Student FOREIGN KEY (StudentID)
+        REFERENCES Students (StudentID),
+    CONSTRAINT FK_Booking_Facility FOREIGN KEY (FacilityID)
+        REFERENCES Facilities(FacilityID),
+    CONSTRAINT FK_Booking_TimeSlot FOREIGN KEY (TimeSlotID)
+        REFERENCES Time_Slot(TimeSlotID)
+);
+/
+
+CREATE TABLE Facility_Location (
+    FacilityID  NUMBER,
+    LocationID  NUMBER,
+    Capacity    NUMBER CHECK (Capacity > 0),
+    Status      VARCHAR2(20),
+    PRIMARY KEY (FacilityID, LocationID),
+    FOREIGN KEY (FacilityID) REFERENCES Facilities(FacilityID),
+    FOREIGN KEY (LocationID) REFERENCES Locations(LocationID)
+);
+/
+
+-------------------------------------------------------------------------------------------
+-- SECTION 2: CONSTRAINTS
+-------------------------------------------------------------------------------------------
+
+ALTER TABLE Time_Slot ADD CONSTRAINT chk_Time CHECK (StartTime < EndTime);
+/
+
+-------------------------------------------------------------------------------------------
+-- SECTION 3: SEED DATA
+-------------------------------------------------------------------------------------------
+
+INSERT ALL
+  INTO Students (StudentID, Name, Email) VALUES (1,'Ali Ahmed','ali@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (2,'Sara Khan','sara@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (3,'Omar Ali','omar@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (4,'Noor Hassan','noor@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (5,'Mona Saleh','mona@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (6,'Yousef Nasser','yousef@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (7,'Laila Saeed','laila@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (8,'Khalid Mohammed','khalid@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (9,'Huda Ali','huda@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (10,'Zainab Omar','zainab@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (11,'Ahmed Saleh','ahmed@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (12,'Rania Fawzi','rania@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (13,'Salim Said','salim@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (14,'Fatma Nasser','fatma@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (15,'Majid Ali','majid@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (16,'Reem Hassan','reem@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (17,'Fahad Khalid','fahad@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (18,'Aisha Omar','aisha@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (19,'Saud Ahmed','saud@email.com')
+  INTO Students (StudentID, Name, Email) VALUES (20,'Dana Mohammed','dana@email.com')
+SELECT * FROM dual;
+
+INSERT ALL
+  INTO Facilities (FacilityID, FacilityName) VALUES (1,'Computer Lab A')
+  INTO Facilities (FacilityID, FacilityName) VALUES (2,'Computer Lab B')
+  INTO Facilities (FacilityID, FacilityName) VALUES (3,'Library Main')
+  INTO Facilities (FacilityID, FacilityName) VALUES (4,'Library Quiet')
+  INTO Facilities (FacilityID, FacilityName) VALUES (5,'Basketball Court 1')
+  INTO Facilities (FacilityID, FacilityName) VALUES (6,'Basketball Court 2')
+  INTO Facilities (FacilityID, FacilityName) VALUES (7,'Swimming Pool')
+  INTO Facilities (FacilityID, FacilityName) VALUES (8,'Gym A')
+  INTO Facilities (FacilityID, FacilityName) VALUES (9,'Gym B')
+  INTO Facilities (FacilityID, FacilityName) VALUES (10,'Lecture Hall 1')
+  INTO Facilities (FacilityID, FacilityName) VALUES (11,'Lecture Hall 2')
+  INTO Facilities (FacilityID, FacilityName) VALUES (12,'Study Room A')
+  INTO Facilities (FacilityID, FacilityName) VALUES (13,'Study Room B')
+  INTO Facilities (FacilityID, FacilityName) VALUES (14,'Auditorium')
+  INTO Facilities (FacilityID, FacilityName) VALUES (15,'Conference Room')
+  INTO Facilities (FacilityID, FacilityName) VALUES (16,'Science Lab')
+  INTO Facilities (FacilityID, FacilityName) VALUES (17,'Engineering Lab')
+  INTO Facilities (FacilityID, FacilityName) VALUES (18,'Music Room')
+  INTO Facilities (FacilityID, FacilityName) VALUES (19,'Art Studio')
+  INTO Facilities (FacilityID, FacilityName) VALUES (20,'Outdoor Field')
+SELECT * FROM dual;
+
+INSERT ALL
+  INTO Locations VALUES (1,'Main Block','1','Floor 1')
+  INTO Locations VALUES (2,'Main Block','2','Floor 2')
+  INTO Locations VALUES (3,'Main Block','3','Floor 3')
+  INTO Locations VALUES (4,'Library Wing','1','Silent area')
+  INTO Locations VALUES (5,'Sports Complex','0','Outdoor')
+  INTO Locations VALUES (6,'Sports Complex','1','Indoor')
+  INTO Locations VALUES (7,'Engineering Block','2','Labs')
+  INTO Locations VALUES (8,'Engineering Block','3','Workshops')
+  INTO Locations VALUES (9,'Science Block','1','Physics labs')
+  INTO Locations VALUES (10,'Science Block','2','Chemistry labs')
+  INTO Locations VALUES (11,'Arts Block','1','Studios')
+  INTO Locations VALUES (12,'Arts Block','2','Music rooms')
+  INTO Locations VALUES (13,'Admin Block','1','Offices')
+  INTO Locations VALUES (14,'Admin Block','2','Meeting rooms')
+  INTO Locations VALUES (15,'Tech Block','1','Computer labs')
+  INTO Locations VALUES (16,'Tech Block','2','Servers')
+  INTO Locations VALUES (17,'Hall Block','1','Lecture halls')
+  INTO Locations VALUES (18,'Hall Block','2','Auditorium')
+  INTO Locations VALUES (19,'Outdoor Area','0','Fields')
+  INTO Locations VALUES (20,'Outdoor Area','0','Courts')
+SELECT * FROM dual;
+
+INSERT ALL
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (1, TO_DATE('08:00','HH24:MI'), TO_DATE('09:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (2, TO_DATE('09:00','HH24:MI'), TO_DATE('10:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (3, TO_DATE('10:00','HH24:MI'), TO_DATE('11:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (4, TO_DATE('11:00','HH24:MI'), TO_DATE('12:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (5, TO_DATE('12:00','HH24:MI'), TO_DATE('13:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (6, TO_DATE('13:00','HH24:MI'), TO_DATE('14:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (7, TO_DATE('14:00','HH24:MI'), TO_DATE('15:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (8, TO_DATE('15:00','HH24:MI'), TO_DATE('16:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (9, TO_DATE('16:00','HH24:MI'), TO_DATE('17:00','HH24:MI'))
+  INTO Time_Slot (TimeSlotID, StartTime, EndTime) VALUES (10, TO_DATE('17:00','HH24:MI'), TO_DATE('18:00','HH24:MI'))
+SELECT * FROM dual;
+
+INSERT ALL
+  INTO Booking VALUES (1, TO_DATE('2026-05-01','YYYY-MM-DD'), 1, 1, 1)
+  INTO Booking VALUES (2, TO_DATE('2026-05-01','YYYY-MM-DD'), 1, 2, 2)
+  INTO Booking VALUES (3, TO_DATE('2026-05-01','YYYY-MM-DD'), 1, 3, 3)
+  INTO Booking VALUES (4, TO_DATE('2026-05-01','YYYY-MM-DD'), 1, 4, 4)
+  INTO Booking VALUES (5, TO_DATE('2026-05-01','YYYY-MM-DD'), 2, 5, 1)
+  INTO Booking VALUES (6, TO_DATE('2026-05-01','YYYY-MM-DD'), 2, 6, 2)
+  INTO Booking VALUES (7, TO_DATE('2026-05-01','YYYY-MM-DD'), 2, 7, 3)
+  INTO Booking VALUES (8, TO_DATE('2026-05-01','YYYY-MM-DD'), 3, 8, 4)
+  INTO Booking VALUES (9, TO_DATE('2026-05-01','YYYY-MM-DD'), 3, 9, 5)
+  INTO Booking VALUES (10, TO_DATE('2026-05-02','YYYY-MM-DD'), 1, 10, 6)
+  INTO Booking VALUES (11, TO_DATE('2026-05-02','YYYY-MM-DD'), 1, 11, 7)
+  INTO Booking VALUES (12, TO_DATE('2026-05-02','YYYY-MM-DD'), 2, 12, 8)
+  INTO Booking VALUES (13, TO_DATE('2026-05-02','YYYY-MM-DD'), 3, 13, 9)
+  INTO Booking VALUES (14, TO_DATE('2026-05-02','YYYY-MM-DD'), 3, 14, 10)
+  INTO Booking VALUES (15, TO_DATE('2026-05-02','YYYY-MM-DD'), 4, 15, 1)
+  INTO Booking VALUES (16, TO_DATE('2026-05-02','YYYY-MM-DD'), 4, 16, 2)
+  INTO Booking VALUES (17, TO_DATE('2026-05-03','YYYY-MM-DD'), 5, 17, 3)
+  INTO Booking VALUES (18, TO_DATE('2026-05-03','YYYY-MM-DD'), 5, 18, 4)
+  INTO Booking VALUES (19, TO_DATE('2026-05-03','YYYY-MM-DD'), 6, 19, 5)
+  INTO Booking VALUES (20, TO_DATE('2026-05-03','YYYY-MM-DD'), 6, 20, 6)
+  INTO Booking VALUES (21, TO_DATE('2026-05-04','YYYY-MM-DD'), 1, 1, 1)
+  INTO Booking VALUES (22, TO_DATE('2026-05-04','YYYY-MM-DD'), 1, 2, 2)
+  INTO Booking VALUES (23, TO_DATE('2026-05-04','YYYY-MM-DD'), 1, 3, 3)
+SELECT * FROM dual;
+
+INSERT ALL
+  INTO Facility_Location VALUES (1,1,100,'Active')
+  INTO Facility_Location VALUES (2,2,80,'Active')
+  INTO Facility_Location VALUES (3,3,60,'Active')
+  INTO Facility_Location VALUES (4,4,70,'Active')
+  INTO Facility_Location VALUES (5,5,200,'Active')
+  INTO Facility_Location VALUES (6,6,150,'Inactive')
+  INTO Facility_Location VALUES (7,7,90,'Active')
+  INTO Facility_Location VALUES (8,8,120,'Active')
+  INTO Facility_Location VALUES (9,9,110,'Inactive')
+  INTO Facility_Location VALUES (10,10,300,'Active')
+  INTO Facility_Location VALUES (11,11,250,'Active')
+  INTO Facility_Location VALUES (12,12,40,'Active')
+  INTO Facility_Location VALUES (13,13,35,'Inactive')
+  INTO Facility_Location VALUES (14,14,500,'Active')
+  INTO Facility_Location VALUES (15,15,60,'Active')
+  INTO Facility_Location VALUES (16,16,70,'Active')
+  INTO Facility_Location VALUES (17,17,80,'Active')
+  INTO Facility_Location VALUES (18,18,200,'Active')
+  INTO Facility_Location VALUES (19,19,400,'Inactive')
+  INTO Facility_Location VALUES (20,20,500,'Active')
+SELECT * FROM dual;
+
+COMMIT;
+
+-------------------------------------------------------------------------------------------
+-- SECTION 4: VIEWS
+-------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE VIEW Student_View AS
+SELECT StudentID, Name, Email
+FROM Students;
+/
+
+CREATE OR REPLACE VIEW Facility_Full_View AS
+SELECT
+    f.FacilityID    AS "FacilityID",
+    f.FacilityName  AS "FacilityName",
+    f.PhotoPath     AS "PhotoPath",
+    l.BuildingName  AS "BuildingName",
+    l.Floor         AS "Floor",
+    fl.Capacity     AS "Capacity",
+    fl.Status       AS "Status"
+FROM Facilities f
+JOIN Facility_Location fl ON f.FacilityID = fl.FacilityID
+JOIN Locations l          ON fl.LocationID = l.LocationID;
+/
+
+-------------------------------------------------------------------------------------------
+-- SECTION 5: FUNCTION
+-------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION Get_Max_Continuous_Availability (
+    p_FacilityID  IN Facilities.FacilityID%TYPE,
+    p_BookingDate IN DATE
+) RETURN VARCHAR2
+IS
+    v_maxSlot        NUMBER;
+    v_facility_name  Facilities.FacilityName%TYPE;
+    v_val            NUMBER := 1;
+    v_currentStart   NUMBER;
+    v_bestStart      NUMBER;
+    v_bestEnd        NUMBER;
+    v_count          NUMBER;
+    v_startTime      Time_Slot.StartTime%TYPE;
+    v_endTime        Time_Slot.EndTime%TYPE;
+BEGIN
+    IF p_FacilityID IS NULL OR p_BookingDate IS NULL THEN
+        RETURN 'Error: Invalid input (NULL values not allowed)';
+    END IF;
+
+    SELECT COUNT(*) INTO v_count FROM Facilities WHERE FacilityID = p_FacilityID;
+    IF v_count = 0 THEN
+        RETURN 'Error: Facility does not exist';
+    END IF;
+
+    SELECT MAX(TimeSlotID) INTO v_maxSlot FROM Time_Slot;
+    SELECT FacilityName INTO v_facility_name FROM Facilities WHERE FacilityID = p_FacilityID;
+
+    WHILE v_val <= v_maxSlot LOOP
+        SELECT COUNT(*) INTO v_count
+        FROM Booking
+        WHERE FacilityID = p_FacilityID
+          AND BookingDate = p_BookingDate
+          AND TimeSlotID = v_val;
+
+        IF v_count = 0 THEN
+            IF v_currentStart IS NULL THEN
+                v_currentStart := v_val;
+            END IF;
+        ELSE
+            IF v_currentStart IS NOT NULL THEN
+                v_bestStart := v_currentStart;
+                v_bestEnd := v_val - 1;
+                v_currentStart := NULL;
+            END IF;
+        END IF;
+
+        v_val := v_val + 1;
+    END LOOP;
+
+    IF v_currentStart IS NOT NULL THEN
+        v_bestStart := v_currentStart;
+        v_bestEnd := v_maxSlot;
+    END IF;
+
+    IF v_bestStart IS NULL THEN
+        RETURN 'No Availability in ' || v_facility_name;
+    END IF;
+
+    SELECT StartTime INTO v_startTime FROM Time_Slot WHERE TimeSlotID = v_bestStart;
+    SELECT EndTime INTO v_endTime FROM Time_Slot WHERE TimeSlotID = v_bestEnd;
+
+    RETURN 'The available time slots for facility: ' || v_facility_name || ' is from ' ||
+           TO_CHAR(v_startTime, 'HH:MI AM') || ' - ' || TO_CHAR(v_endTime, 'HH:MI AM');
+END Get_Max_Continuous_Availability;
+/
+
+-------------------------------------------------------------------------------------------
+-- SECTION 6: PROCEDURES
+-------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE GetAvailableTimeSlots (
+    p_FacilityID  IN  Facilities.FacilityID%TYPE,
+    p_BookingDate IN  DATE,
+    p_Cursor      OUT SYS_REFCURSOR
+) AS
+    v_count NUMBER;
+BEGIN
+    IF p_FacilityID IS NULL OR p_BookingDate IS NULL THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Invalid input (NULL values not allowed)');
+    END IF;
+
+    SELECT COUNT(*) INTO v_count FROM Facilities WHERE FacilityID = p_FacilityID;
+    IF v_count = 0 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Facility does not exist');
+    END IF;
+
+    OPEN p_Cursor FOR
+        SELECT
+            ts.TimeSlotID                      AS "TimeSlotID",
+            TO_CHAR(ts.StartTime, 'HH24:MI')   AS "StartTime",
+            TO_CHAR(ts.EndTime, 'HH24:MI')     AS "EndTime"
+        FROM Time_Slot ts
+        WHERE ts.TimeSlotID NOT IN (
+            SELECT TimeSlotID
+            FROM Booking
+            WHERE FacilityID = p_FacilityID
+              AND BookingDate = p_BookingDate
+        );
+END GetAvailableTimeSlots;
+/
+
+CREATE OR REPLACE PROCEDURE GetAllSlotsWithStatus (
+    p_FacilityID  IN  Facilities.FacilityID%TYPE,
+    p_BookingDate IN  DATE,
+    p_Cursor      OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_Cursor FOR
+        SELECT
+            ts.TimeSlotID                    AS "TimeSlotID",
+            TO_CHAR(ts.StartTime, 'HH24:MI') AS "StartTime",
+            TO_CHAR(ts.EndTime, 'HH24:MI')   AS "EndTime",
+            CASE WHEN b.TimeSlotID IS NULL THEN 'Available' ELSE 'Booked' END AS "Status"
+        FROM Time_Slot ts
+        LEFT JOIN Booking b
+            ON b.TimeSlotID = ts.TimeSlotID
+           AND b.FacilityID = p_FacilityID
+           AND TRUNC(b.BookingDate) = TRUNC(p_BookingDate)
+        ORDER BY ts.TimeSlotID;
+END GetAllSlotsWithStatus;
+/
+
+CREATE OR REPLACE PROCEDURE AddBooking (
+    p_BookingID   IN  Booking.BookingID%TYPE,
+    p_BookingDate IN  Booking.BookingDate%TYPE,
+    p_FacilityID  IN  Booking.FacilityID%TYPE,
+    p_StudentID   IN  Booking.StudentID%TYPE,
+    p_TimeSlotID  IN  Booking.TimeSlotID%TYPE,
+    p_Result      OUT VARCHAR2
+) AS
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count
+    FROM Facility_Location
+    WHERE FacilityID = p_FacilityID AND Status = 'Inactive';
+
+    IF v_count > 0 THEN
+        p_Result := 'Error: Cannot book an inactive facility.';
+        RETURN;
+    END IF;
+
+    SELECT COUNT(*) INTO v_count
+    FROM Booking
+    WHERE FacilityID = p_FacilityID
+      AND TRUNC(BookingDate) = TRUNC(p_BookingDate)
+      AND TimeSlotID = p_TimeSlotID;
+
+    IF v_count > 0 THEN
+        p_Result := 'Error: This time slot is already booked for this facility.';
+        RETURN;
+    END IF;
+
+    INSERT INTO Booking (BookingID, BookingDate, FacilityID, StudentID, TimeSlotID)
+    VALUES (p_BookingID, TRUNC(p_BookingDate), p_FacilityID, p_StudentID, p_TimeSlotID);
+
+    p_Result := 'Booking added successfully.';
+END AddBooking;
+/
+
+CREATE OR REPLACE PROCEDURE DeleteBooking (
+    p_BookingID IN  Booking.BookingID%TYPE,
+    p_Result    OUT VARCHAR2
+) AS
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM Booking WHERE BookingID = p_BookingID;
+
+    IF v_count = 0 THEN
+        p_Result := 'Error: Booking not found.';
+        RETURN;
+    END IF;
+
+    DELETE FROM Booking WHERE BookingID = p_BookingID;
+    p_Result := 'Booking cancelled successfully.';
+END DeleteBooking;
+/
+
+CREATE OR REPLACE PROCEDURE GetBookingsByStudent (
+    p_StudentID IN  Booking.StudentID%TYPE,
+    p_Cursor    OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_Cursor FOR
+        SELECT
+            b.BookingID                          AS "BookingID",
+            TO_CHAR(b.BookingDate, 'YYYY-MM-DD') AS "BookingDate",
+            f.FacilityName                       AS "FacilityName",
+            TO_CHAR(ts.StartTime, 'HH24:MI')     AS "StartTime",
+            TO_CHAR(ts.EndTime, 'HH24:MI')       AS "EndTime",
+            s.StudentID                          AS "StudentID",
+            s.Name                                AS "StudentName"
+        FROM Booking b
+        JOIN Facilities f  ON b.FacilityID  = f.FacilityID
+        JOIN Time_Slot ts  ON b.TimeSlotID  = ts.TimeSlotID
+        JOIN Students s    ON b.StudentID   = s.StudentID
+        WHERE b.StudentID = p_StudentID
+        ORDER BY b.BookingDate, ts.StartTime;
+END GetBookingsByStudent;
+/
+
+CREATE OR REPLACE PROCEDURE GetAllBookings (
+    p_Cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_Cursor FOR
+        SELECT
+            b.BookingID                          AS "BookingID",
+            TO_CHAR(b.BookingDate, 'YYYY-MM-DD') AS "BookingDate",
+            f.FacilityName                       AS "FacilityName",
+            TO_CHAR(ts.StartTime, 'HH24:MI')     AS "StartTime",
+            TO_CHAR(ts.EndTime, 'HH24:MI')       AS "EndTime",
+            s.StudentID                          AS "StudentID",
+            s.Name                                AS "StudentName"
+        FROM Booking b
+        JOIN Facilities f  ON b.FacilityID  = f.FacilityID
+        JOIN Time_Slot ts  ON b.TimeSlotID  = ts.TimeSlotID
+        JOIN Students s    ON b.StudentID   = s.StudentID
+        ORDER BY b.BookingID;
+END GetAllBookings;
+/
+
+CREATE OR REPLACE PROCEDURE GetBusyReport (
+    p_Cursor OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN p_Cursor FOR
+        SELECT
+            f.FacilityID   AS "FacilityID",
+            f.FacilityName AS "FacilityName",
+            COUNT(b.BookingID) AS "BookingCount",
+            CASE
+                WHEN COUNT(b.BookingID) = 0 THEN 'Unused'
+                WHEN COUNT(b.BookingID) > 5 THEN 'Busy'
+                ELSE 'Not Busy'
+            END AS "Status",
+            ROUND(
+                COUNT(b.BookingID) /
+                NULLIF((SELECT COUNT(DISTINCT BookingDate) FROM Booking) * (SELECT COUNT(*) FROM Time_Slot), 0)
+                * 100, 1
+            ) AS "UtilizationPct",
+            (
+                SELECT TO_CHAR(ts.StartTime,'HH24:MI') || ' - ' || TO_CHAR(ts.EndTime,'HH24:MI')
+                FROM Booking b2
+                JOIN Time_Slot ts ON b2.TimeSlotID = ts.TimeSlotID
+                WHERE b2.FacilityID = f.FacilityID
+                GROUP BY ts.TimeSlotID, ts.StartTime, ts.EndTime
+                ORDER BY COUNT(*) DESC
+                FETCH FIRST 1 ROW ONLY
+            ) AS "PeakHour"
+        FROM Facilities f
+        LEFT JOIN Booking b ON f.FacilityID = b.FacilityID
+        GROUP BY f.FacilityID, f.FacilityName
+        ORDER BY COUNT(b.BookingID) DESC;
+END GetBusyReport;
+/
+
+CREATE OR REPLACE PROCEDURE AddFacility (
+    p_FacilityName IN Facilities.FacilityName%TYPE,
+    p_BuildingName IN Locations.BuildingName%TYPE,
+    p_Floor        IN Locations.Floor%TYPE,
+    p_Capacity     IN Facility_Location.Capacity%TYPE,
+    p_Status       IN Facility_Location.Status%TYPE,
+    p_PhotoPath    IN Facilities.PhotoPath%TYPE,
+    p_Result       OUT VARCHAR2
+) AS
+    v_newFacilityID NUMBER;
+    v_newLocationID NUMBER;
+BEGIN
+    SELECT NVL(MAX(FacilityID), 0) + 1 INTO v_newFacilityID FROM Facilities;
+    SELECT NVL(MAX(LocationID), 0) + 1 INTO v_newLocationID FROM Locations;
+
+    INSERT INTO Facilities (FacilityID, FacilityName, PhotoPath)
+    VALUES (v_newFacilityID, p_FacilityName, p_PhotoPath);
+
+    INSERT INTO Locations (LocationID, BuildingName, Floor, Description)
+    VALUES (v_newLocationID, p_BuildingName, p_Floor, NULL);
+
+    INSERT INTO Facility_Location (FacilityID, LocationID, Capacity, Status)
+    VALUES (v_newFacilityID, v_newLocationID, p_Capacity, p_Status);
+
+    p_Result := 'Facility added successfully.';
+END AddFacility;
+/
+
+CREATE OR REPLACE PROCEDURE DeleteFacility (
+    p_FacilityID IN Facilities.FacilityID%TYPE,
+    p_Result     OUT VARCHAR2
+) AS
+    v_bookingCount NUMBER;
+    v_locationId   NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_bookingCount FROM Booking WHERE FacilityID = p_FacilityID;
+
+    IF v_bookingCount > 0 THEN
+        p_Result := 'Error: Cannot delete a facility that has existing bookings.';
+        RETURN;
+    END IF;
+
+    SELECT LocationID INTO v_locationId FROM Facility_Location WHERE FacilityID = p_FacilityID;
+
+    DELETE FROM Facility_Location WHERE FacilityID = p_FacilityID;
+    DELETE FROM Facilities WHERE FacilityID = p_FacilityID;
+    DELETE FROM Locations WHERE LocationID = v_locationId;
+
+    p_Result := 'Facility deleted successfully.';
+END DeleteFacility;
+/
+
+CREATE OR REPLACE PROCEDURE UpdateFacilityStatus (
+    p_FacilityID IN  Facility_Location.FacilityID%TYPE,
+    p_Status     IN  Facility_Location.Status%TYPE,
+    p_Result     OUT VARCHAR2
+) AS
+BEGIN
+    UPDATE Facility_Location SET Status = p_Status WHERE FacilityID = p_FacilityID;
+    IF SQL%ROWCOUNT = 0 THEN
+        p_Result := 'Error: Facility not found.';
+    ELSE
+        p_Result := 'Status updated successfully.';
+    END IF;
+END UpdateFacilityStatus;
+/
+
+CREATE OR REPLACE PROCEDURE RegisterStudent (
+    p_Name       IN  Students.Name%TYPE,
+    p_Email      IN  Students.Email%TYPE,
+    p_Password   IN  VARCHAR2,
+    p_NewID      OUT NUMBER,
+    p_Result     OUT VARCHAR2
+) AS
+    v_emailCount NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_emailCount FROM Students WHERE Email = p_Email;
+    IF v_emailCount > 0 THEN
+        p_Result := 'Error: This email is already registered.';
+        RETURN;
+    END IF;
+
+    SELECT NVL(MAX(StudentID), 0) + 1 INTO p_NewID FROM Students;
+
+    INSERT INTO Students (StudentID, Name, Email, Password)
+    VALUES (p_NewID, p_Name, p_Email, p_Password);
+
+    p_Result := 'Student registered successfully.';
+END RegisterStudent;
+/
+
+CREATE OR REPLACE PROCEDURE DeleteStudent (
+    p_StudentID IN  Students.StudentID%TYPE,
+    p_Result    OUT VARCHAR2
+) AS
+    v_bookingCount NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_bookingCount FROM Booking WHERE StudentID = p_StudentID;
+
+    IF v_bookingCount > 0 THEN
+        p_Result := 'Error: Cannot delete a student with existing bookings.';
+        RETURN;
+    END IF;
+
+    DELETE FROM Students WHERE StudentID = p_StudentID;
+    p_Result := 'Student deleted successfully.';
+END DeleteStudent;
+/
