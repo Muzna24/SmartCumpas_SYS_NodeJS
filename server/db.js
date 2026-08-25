@@ -1,19 +1,26 @@
 require('dotenv').config();
-const oracledb = require('oracledb');
 
-// Makes query results come back as plain objects (e.g. row.NAME) instead of arrays
-oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+const mysql = require('mysql2/promise');
 
 const config = {
+    host: process.env.DB_HOST || '127.0.0.1',
+    port: Number(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    connectString: process.env.DB_CONNECT_STRING
+    database: process.env.DB_NAME,
+
+    waitForConnections: true,
+    connectionLimit: Number(process.env.DB_POOL_LIMIT) || 10,
+    queueLimit: 0
 };
 
 // One shared connection pool for the whole app
-const poolPromise = oracledb.createPool(config)
-    .then(pool => {
-        console.log('Connected to Oracle Database');
+const pool = mysql.createPool(config);
+
+// Test database connection
+const poolPromise = pool.query('SELECT 1')
+    .then(() => {
+        console.log('Connected to MySQL Database');
         return pool;
     })
     .catch(err => {
@@ -21,4 +28,8 @@ const poolPromise = oracledb.createPool(config)
         throw err;
     });
 
-module.exports = { oracledb, poolPromise };
+module.exports = {
+    mysql,
+    pool,
+    poolPromise
+};
